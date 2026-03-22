@@ -7,6 +7,11 @@ import mongoose, { Schema, Document } from 'mongoose';
 export interface IUser extends Document {
   email: string;               // Primary identifier for Web2 login
   passwordHash: string;        // Hashed password
+  
+  // Password Reset Flow
+  resetPasswordToken?: string;
+  resetPasswordExpires?: Date;
+
   stellarPublicKey?: string;   // Added later when they connect Freighter wallet
   nonce?: string;              // For SIWE (Sign-In With Ethereum/Stellar) flow if needed later
   role: 'creator' | 'developer' | 'admin';
@@ -32,12 +37,14 @@ const UserSchema: Schema = new Schema(
       select: false, // Don't return password in queries by default
       // Contributors: You MUST implement a pre-save hook using bcryptjs 
       // to hash the password before it is saved to the database.
-      // Example: 
-      // UserSchema.pre('save', async function(next) {
-      //   if (!this.isModified('passwordHash')) return next();
-      //   this.passwordHash = await bcrypt.hash(this.passwordHash, 12);
-      //   next();
-      // });
+    },
+    resetPasswordToken: {
+      type: String,
+      select: false,
+    },
+    resetPasswordExpires: {
+      type: Date,
+      select: false,
     },
     stellarPublicKey: {
       type: String,
