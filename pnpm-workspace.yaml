@@ -1,0 +1,6 @@
+packages:
+  - "frontend"
+  - "backend"
+  - "oracle-worker"
+  - "packages/*"
+  - "services/*"
